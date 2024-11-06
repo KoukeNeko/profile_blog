@@ -9,4 +9,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: 'build', // Output directory for build files
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+      },
+    },
+  },
+  server: {
+    port: 3000,
+  }
 })

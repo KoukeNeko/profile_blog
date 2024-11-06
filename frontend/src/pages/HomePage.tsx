@@ -8,8 +8,6 @@ import {
 import {
   LinkedinIcon,
   Mail,
-  ThumbsDown,
-  Twitter,
   ShieldCheck,
   MapPin,
   FileUser,

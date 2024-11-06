@@ -1,6 +1,6 @@
 import '@/assets/font/elffont-rock.otf'
 import { Button } from '../ui/button'
-import { Moon, Settings, User } from 'lucide-react'
+import { Settings } from 'lucide-react'
 
 function NavBar() {
   return (

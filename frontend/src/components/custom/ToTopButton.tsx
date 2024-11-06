@@ -29,7 +29,7 @@ const ToTopButton = () => {
   return (
     <div className="fixed bottom-4 right-4">
       {isVisible && (
-        <Button variant="outline" onClick={scrollToTop} className="bg-zinc-900 border-zinc-600">
+        <Button variant="outline" onClick={scrollToTop} className="bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800/50">
           <ChevronUp />
         </Button>
       )}

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "@/components/custom/NavBar";
 import Footer from "@/components/custom/Footer";
+import ToTopButton from "@/components/custom/ToTopButton";
 import Homepage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import BlogPage from "@/pages/BlogPage";
@@ -23,6 +24,7 @@ function App() {
           </main>
           <Footer />
         </div>
+        <ToTopButton />
       </div>
     </Router>
   );

@@ -64,10 +64,15 @@ function Homepage() {
           {displayText}
         </span>
         {!isTypingComplete && (
-          <span className="inline-flex items-center ml-1">
+          <span className="inline-block ml-1">
           <span
-            className="text-zinc-300 text-[0.8em] animate-pulse leading-none"
-            style={{ transform: 'translateY(-5px)' }}
+            className="text-zinc-300 animate-pulse block"
+            style={{
+              fontSize: '0.8em',
+              lineHeight: 1,
+              verticalAlign: 'middle',
+              marginTop: '-2px'
+            }}
           >
             &#11044;
           </span>

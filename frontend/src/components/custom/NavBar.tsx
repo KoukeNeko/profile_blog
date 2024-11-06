@@ -1,19 +1,32 @@
-import '@/assets/font/elffont-rock.otf'
 import { Button } from '../ui/button'
 import { Settings } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 function NavBar() {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    // Check if the font is loaded
+    document.fonts.ready.then(() => {
+      // Additional check specifically for our font
+      document.fonts.load('12px ElfFont').then(() => {
+        setFontLoaded(true);
+      });
+    });
+  }, []);
+
   return (
     <header className="p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <span 
-            className="text-sm flex items-center" 
+            className={`text-sm flex items-center ${fontLoaded ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              fontFamily: "ElfFont",
-              transform: "translateY(4px)",  // 微調往下的位置
-              lineHeight: "0.9",               // 減少行高
-              display: "inline-flex",        // 確保更好的對齊控制
-              alignItems: "center"           // 垂直居中
+              fontFamily: "'ElfFont', system-ui",
+              marginTop: "4px",
+              lineHeight: "0.9",
+              display: "inline-flex",
+              alignItems: "center",
+              transition: "opacity 0.3s ease"
             }}
           >
             &gt; ㄋ ㄧ ˇ ㄏ ㄠ ˇ  ㄕ ˋ ㄐ ㄧ ㄝ ˋ !

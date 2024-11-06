@@ -1,4 +1,7 @@
 @font-face {
   font-family: 'ElfFont';
-  src: local('/assets/font/elffont-rock.otf') format('opentype');
+  src: url('/assets/font/elffont-rock.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

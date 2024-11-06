@@ -1,6 +1,12 @@
 import { Button } from "../ui/button";
-import { Settings } from "lucide-react";
+import { Settings, Menu, Signature, ReceiptText } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -22,15 +28,23 @@ function NavBar() {
           </span>
           <span className="animate-[blink_1s_ease-in-out_infinite]">▌</span>
         </Link>
-        <nav className="flex items-center space-x-4">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-4">
           <Button
             variant="ghost"
             className="text-zinc-400"
             onClick={() => navigate("/blog")}
           >
+            <ReceiptText className="mr-2" size={16} />
             Blog
           </Button>
-          <Button variant="ghost" className="text-zinc-400" onClick={() => navigate("/about")}>
+          <Button
+            variant="ghost"
+            className="text-zinc-400"
+            onClick={() => navigate("/about")}
+          >
+            <Signature className="mr-2" size={16} />
             About
           </Button>
           <Button
@@ -41,6 +55,34 @@ function NavBar() {
             <Settings size={16} />
           </Button>
         </nav>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="text-zinc-400 p-2">
+                <Menu size={20} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-48 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800/50 text-zinc-400"
+            >
+              <DropdownMenuItem onClick={() => navigate("/blog")}>
+                <ReceiptText className="mr-2" size={16} />
+                Blog
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/about")}>
+                <Signature className="mr-2" size={16} />
+                About
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/login")}>
+                <Settings className="mr-2" size={16} />
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );

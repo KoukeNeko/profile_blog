@@ -1,37 +1,24 @@
 import { Button } from '../ui/button'
 import { Settings } from 'lucide-react'
-import { useEffect, useState } from 'react'
 
 function NavBar() {
-  const [fontLoaded, setFontLoaded] = useState(false);
-
-  useEffect(() => {
-    // Check if the font is loaded
-    document.fonts.ready.then(() => {
-      // Additional check specifically for our font
-      document.fonts.load('12px ElfFont').then(() => {
-        setFontLoaded(true);
-      });
-    });
-  }, []);
-
   return (
-    <header className="p-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
+    <header className="fixed top-0 left-0 right-0 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800/50 z-50 h-16">
+      {/* 使用 h-full 確保容器佔滿高度，移除 p-4 改用 px-4 */}
+      <div className="h-full flex justify-between items-center max-w-7xl mx-auto px-4">
+        <div className="flex items-center space-x-1">
           <span 
-            className={`text-sm flex items-center ${fontLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className="text-sm flex items-center opacity-100 vt323-regular"
             style={{
-              fontFamily: "'ElfFont', system-ui",
-              marginTop: "4px",
-              lineHeight: "0.9",
+              fontFamily: "'VT323', system-ui",
               display: "inline-flex",
               alignItems: "center",
               transition: "opacity 0.3s ease"
             }}
           >
-            &gt; ㄋ ㄧ ˇ ㄏ ㄠ ˇ  ㄕ ˋ ㄐ ㄧ ㄝ ˋ !
+            &gt; Hello World!
           </span>
-          <span className="animate-[blink_1s_ease-in-out_infinite]">■</span>
+          <span className="animate-[blink_1s_ease-in-out_infinite]">▌</span>
         </div>
         <nav className="flex items-center space-x-4">
           <Button variant="ghost" className="text-zinc-400">
@@ -44,6 +31,7 @@ function NavBar() {
             <Settings size={16} />
           </Button>
         </nav>
+      </div>
     </header>
   )
 }

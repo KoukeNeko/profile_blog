@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import TypewriterText from "@/components/custom/ui/typewriter_gpt_style";
 import {
   HoverCard,
   HoverCardContent,
@@ -13,7 +14,7 @@ import {
   FileUser,
   Github,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 
 function Homepage() {
   const [isLinkedinHovered, setIsLinkedinHovered] = useState(false);
@@ -21,63 +22,19 @@ function Homepage() {
   const [isGithubHovered, setIsGithubHovered] = useState(false);
 
   // 新增用於打字效果的 state
-  const [displayText, setDisplayText] = useState("");
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const fullText = `Hello, this is ${
     import.meta.env.VITE_APP_NAME || "doeshing"
   }!`;
 
-  useEffect(() => {
-    let currentIndex = 0;
-    const typingDelay = 50; // The delay between each character
-    const randomVariation = 30; // The random variation in typing delay
-
-    const typeNextChar = () => {
-      if (currentIndex <= fullText.length) {
-        setDisplayText(fullText.slice(0, currentIndex));
-        currentIndex++;
-
-        // add a random delay to simulate human typing
-        const randomDelay = typingDelay + Math.random() * randomVariation;
-        setTimeout(typeNextChar, randomDelay);
-      } else {
-        setIsTypingComplete(true);
-      }
-    };
-
-    // Start the typing animation
-    setTimeout(typeNextChar, 400); // 400ms delay before starting the typing animation
-
-    return () => {
-      setIsTypingComplete(false);
-    };
-  }, [fullText]);
-
   return (
    <>
       <h1 className="text-4xl font-bold text-zinc-300 mb-8 relative">
-        <span
-          className={`transition-opacity duration-200 ${
-            isTypingComplete ? "opacity-100" : "opacity-80"
-          }`}
-        >
-          {displayText}
-        </span>
-        {!isTypingComplete && (
-          <span className="inline-block ml-1">
-          <span
-            className="text-zinc-300 animate-pulse block"
-            style={{
-              fontSize: '0.8em',
-              lineHeight: 1,
-              verticalAlign: 'middle',
-              marginTop: '-2px'
-            }}
-          >
-            &#11044;
-          </span>
-        </span>
-        )}
+        <TypewriterText 
+          text={fullText}
+          typingDelay={50}
+          randomVariation={30}
+          delay={400}
+        />
       </h1>
       <div className="flex space-x-6">
         <a

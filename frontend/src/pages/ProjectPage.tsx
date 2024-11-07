@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import TypewriterText from "@/components/custom/ui/typewriter_gpt_style";
 import { CalendarDays, Github, Globe, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,54 +12,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-// Text animation component
-const TypewriterText = ({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) => {
-  const [displayText, setDisplayText] = useState("");
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
-
-  useEffect(() => {
-    let currentIndex = 0;
-    const typingDelay = 5;
-    const randomVariation = 15;
-
-    const typeNextChar = () => {
-      if (currentIndex <= text.length) {
-        setDisplayText(text.slice(0, currentIndex));
-        currentIndex++;
-        const randomDelay = typingDelay + Math.random() * randomVariation;
-        setTimeout(typeNextChar, randomDelay);
-      } else {
-        setIsTypingComplete(true);
-      }
-    };
-
-    const timer = setTimeout(() => typeNextChar(), delay);
-    return () => clearTimeout(timer);
-  }, [text, delay]);
-
-  return (
-    <span className={className}>
-      <span className={`transition-opacity duration-200 ${
-        isTypingComplete ? "opacity-100" : "opacity-80"
-      }`}>
-        {displayText}
-      </span>
-      {!isTypingComplete && (
-        <span className="inline-block ml-1">
-          <span className="text-zinc-300 animate-pulse block" style={{
-            fontSize: '0.8em',
-            lineHeight: 1,
-            verticalAlign: 'middle',
-            marginTop: '-2px'
-          }}>
-            &#11044;
-          </span>
-        </span>
-      )}
-    </span>
-  );
-};
 
 interface Project {
   id: number;

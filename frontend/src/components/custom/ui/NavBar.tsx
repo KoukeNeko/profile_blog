@@ -80,6 +80,10 @@ function NavBar() {
                 <ReceiptText className="mr-2" size={16} />
                 Blog
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/project")}>
+                <Code className="mr-2" size={16} />
+                Project
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/about")}>
                 <Signature className="mr-2" size={16} />
                 About

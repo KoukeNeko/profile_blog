@@ -201,6 +201,7 @@ async def delete_user(user_id: str):
     except Exception as e:
         print(f"Error in delete_user: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
+        
 # Health check endpoint
 @app.get("/health")
 async def health_check():

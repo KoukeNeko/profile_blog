@@ -29,7 +29,7 @@ export default function TermsPage() {
             <CardContent className="space-y-4 text-zinc-400">
               <p>
                 <TypewriterText 
-                  text="歡迎使用我們的服務。請仔細閱讀以下條款和條件。透過訪問或使用我們的服務，您同意受這些條款的約束。如果您不同意這些條款的任何部分，請不要使用我們的服務。"
+                  text="歡迎使用我們的服務。請仔細閱讀以下條款和條件。透過存取或使用我們的服務，您同意受這些條款的約束。如果您不同意這些條款的任何部分，請不要使用我們的服務。"
                   delay={getDelay(0, 1)}
                 />
               </p>

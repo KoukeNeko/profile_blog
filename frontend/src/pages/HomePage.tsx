@@ -14,9 +14,58 @@ import {
   FileUser,
   Github,
 } from "lucide-react";
-import { useState} from "react";
+import { useState, useEffect} from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster"
 
 function Homepage() {
+
+  const { toast } = useToast();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    // 確保組件完全掛載
+    setIsReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const checkLoginStatus = async () => {
+      const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+      if (justLoggedIn) {
+        try {
+          const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+          
+          // 確保有足夠的延遲
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          console.log('Showing toast for:', userInfo.name); // 調試日誌
+          
+          toast({
+            title: "登入成功",
+            description: `歡迎回來，${userInfo.name}！`,
+            duration: 3000,
+            className: "bg-zinc-950 border-zinc-800 text-zinc-300"
+          });
+          
+          sessionStorage.removeItem('justLoggedIn');
+        } catch (error) {
+          console.error('Error showing welcome toast:', error);
+        }
+      }
+    };
+
+    checkLoginStatus();
+  }, [isReady, toast]);
+
+  // 用於調試
+  useEffect(() => {
+    console.log('HomePage mounted');
+    console.log('JustLoggedIn status:', sessionStorage.getItem('justLoggedIn'));
+    console.log('UserInfo:', localStorage.getItem('userInfo'));
+  }, []);
+
   const [isLinkedinHovered, setIsLinkedinHovered] = useState(false);
   const [isResumeHovered, setIsResumeHovered] = useState(false);
   const [isGithubHovered, setIsGithubHovered] = useState(false);
@@ -141,6 +190,7 @@ function Homepage() {
           </HoverCardContent>
         </HoverCard>
       </div>
+      <Toaster theme="dark"/>
     </>
   );
 }

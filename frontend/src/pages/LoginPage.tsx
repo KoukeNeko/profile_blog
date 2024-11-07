@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import * as jwtDecode from 'jwt-decode';
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
+
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
@@ -24,16 +28,32 @@ export default function LoginPage() {
         picture: decoded.picture,
       };
       
+      
+      // 添加一個登入狀態標記
+      sessionStorage.setItem('justLoggedIn', 'true');
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      
+      await Promise.resolve();
       navigate('/');
       
     } catch (error) {
       console.error('Error processing login:', error);
+      toast({
+        variant: "destructive",
+        title: "登入失敗",
+        description: "處理登入資訊時發生錯誤，請稍後再試。",
+      });
     }
   };
 
   const handleGoogleError = () => {
     console.error('Login Failed');
+    // 顯示登入錯誤訊息
+    toast({
+      variant: "destructive",
+      title: "登入失敗",
+      description: "Google 登入過程發生錯誤，請確認您的網路連線並重新嘗試。",
+    });
   };
 
   return (
@@ -80,6 +100,7 @@ export default function LoginPage() {
           </div>
         </div>
       </CardContent>
+      <Toaster />
     </Card>
   );
 }

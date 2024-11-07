@@ -1,6 +1,6 @@
 function Footer() {
     return (
-        <footer className="w-full h-16 text-xs sm:text-sm text-zinc-600 border-t border-zinc-800/50 bg-zinc-900">
+        <footer className="w-full h-16 text-xs sm:text-sm text-zinc-600 border-t border-zinc-800/50 ">
             {/* 使用 flex 和 h-full 來實現完整高度的垂直置中 */}
             <div className="h-full flex items-center justify-center">
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2">

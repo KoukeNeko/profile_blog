@@ -12,7 +12,7 @@ function NavBar() {
   const navigate = useNavigate();
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800/50 z-50 h-16">
+    <header className="fixed top-0 left-0 right-0 bg-zinc-950/80 backdrop-blur-sm border-b border-zinc-800/50 z-50 h-16">
       <div className="h-full flex justify-between items-center max-w-7xl mx-auto px-4">
         <Link to="/" className="flex items-center space-x-1">
           <span

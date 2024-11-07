@@ -25,7 +25,6 @@ class LineAuthRequest(BaseModel):
     userId: str
     displayName: str
     pictureUrl: Optional[str] = ''
-    email: Optional[str] = ''
     statusMessage: Optional[str] = ''
     access_token: str
 
@@ -174,3 +173,4 @@ async def google_auth(request: GoogleAuthRequest):
     except Exception as e:
         print(f"Error in google_auth: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
+        

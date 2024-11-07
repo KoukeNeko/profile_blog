@@ -14,6 +14,7 @@ import LineCallbackPage from "@/pages/LineCallbackPage";
 import BlogPage from "@/pages/BlogPage";
 import ProjectPage from "@/pages/ProjectPage";
 import AboutPage from "@/pages/AboutPage";
+import ProfilePage from "@/pages/ProfilePage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/project" element={<ProjectPage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
               </Routes>

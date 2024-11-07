@@ -1,5 +1,6 @@
 import { LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, SVGProps } from "react";
+
 
 export interface TypewriterProfileItemProps {
   icon: LucideIcon;
@@ -14,18 +15,18 @@ export interface TypewriterProfileItemProps {
 }
 
 export interface ProfileCardProps {
-  icon: LucideIcon;
-  title: ReactNode;
+  icon: React.ComponentType<SVGProps<SVGSVGElement>> | ReactNode;
+  title: string;
   children: ReactNode;
 }
-// 可重用的個人資料項目元件
+
 export interface ProfileItemProps {
-  icon: LucideIcon;
-  title: ReactNode;
-  subtitle?: ReactNode;
-  period?: ReactNode;
-  location?: ReactNode;
-  description?: ReactNode;
+  icon: React.ComponentType<SVGProps<SVGSVGElement>> | ReactNode;
+  title: string;
+  subtitle?: string;
+  period?: string;
+  location?: string;
+  description?: string | string[];
   extra?: ReactNode;
 }
 

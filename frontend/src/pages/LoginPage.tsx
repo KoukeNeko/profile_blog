@@ -1,5 +1,6 @@
 import { GoogleLogin } from '@react-oauth/google';
 import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +16,15 @@ import { Separator } from "@/components/ui/separator"
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
+  // if user is already logged in, redirect to profile page
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      navigate('/profile');
+    }
+  }, [navigate]);
+
   const { toast } = useToast();
 
   const handleGoogleSuccess = async (credentialResponse: any) => {

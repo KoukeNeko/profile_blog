@@ -8,13 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class JSONEncoder:
-    @staticmethod
-    def encode(obj):
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        return obj
-
 class Database:
     client: Optional[AsyncIOMotorClient] = None
     db = None
@@ -36,7 +29,8 @@ class Database:
             
             cls.db = cls.client.profile_blog
             
-            await cls.db.users.create_index("primary_account.id")
+            # Create indexes
+            await cls.db.users.create_index("primary_account")
             await cls.db.users.create_index([("connected_accounts.google.id", 1)])
             await cls.db.users.create_index([("connected_accounts.line.id", 1)])
             
@@ -48,7 +42,7 @@ class Database:
     def _serialize_doc(cls, doc: Optional[Dict]) -> Optional[Dict]:
         if doc is None:
             return None
-        doc['_id'] = str(doc['_id'])
+        doc['id'] = str(doc.pop('_id'))  # Convert _id to id
         return doc
     
     @classmethod

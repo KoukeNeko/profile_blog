@@ -1,5 +1,5 @@
 import { Button } from "../../ui/button";
-import { Settings, Menu, Signature, ReceiptText, Code } from "lucide-react";
+import { Settings, Menu, Signature, ReceiptText, Code, User2Icon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -58,9 +58,14 @@ function NavBar() {
           <Button
             variant="ghost"
             className="text-zinc-400 p-2"
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              // Check if user is logged in
+              const userInfo = localStorage.getItem('userInfo');
+              if (userInfo) return navigate("/profile");
+              return navigate("/login");
+            }}
           >
-            <Settings size={16} />
+            <User2Icon size={16} />
           </Button>
         </nav>
 
@@ -89,8 +94,8 @@ function NavBar() {
                 About
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/login")}>
-                <Settings className="mr-2" size={16} />
-                Settings
+                <User2Icon className="mr-2" size={16} />
+                Profile
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

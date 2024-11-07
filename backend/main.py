@@ -2,7 +2,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, Union, Literal
 from database import Database
 import jwt
 from datetime import datetime
@@ -12,6 +12,7 @@ from bson import ObjectId
 
 app = FastAPI()
 
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -20,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Pydantic models
 class LineAuthRequest(BaseModel):
     userId: str
     displayName: str
@@ -32,73 +33,85 @@ class GoogleAuthRequest(BaseModel):
     credential: str
     clientId: str
 
-class SocialAccount(BaseModel):
+class SocialAccountBase(BaseModel):
     id: str
-    provider: str
     name: str
     picture: Optional[str]
-    email: Optional[str]
-    status_message: Optional[str] = None
     access_token: str
+    
+class GoogleAccount(SocialAccountBase):
+    email: str
 
+class LineAccount(SocialAccountBase):
+    status_message: Optional[str] = ''
+
+class User(BaseModel):
+    name: str
+    picture: Optional[str]
+    email: Optional[str] = ''  # Optional for LINE users
+    primary_account: Literal["Google", "LINE"]
+    connected_accounts: Dict[str, Union[GoogleAccount, LineAccount]]
+    last_login: str
+    created_at: str
+
+# Database connection events
 @app.on_event("startup")
 async def startup_db_client():
-    await Database.connect_db()
+    try:
+        await Database.connect_db()
+        print("Database connection established")
+    except Exception as e:
+        print(f"Failed to establish database connection: {e}")
+        # You might want to exit the application here if DB connection is critical
+        # import sys
+        # sys.exit(1)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
     await Database.close_db()
+    print("Database connection closed")
+
+# Endpoints
 @app.post("/api/auth/social/line")
 async def line_auth(request: LineAuthRequest):
     try:
+        if not Database.client:
+            await Database.connect_db()
+            
         social_id = request.userId
         existing_user = await Database.get_user_by_social_id("line", social_id)
         
+        line_account = LineAccount(
+            id=social_id,
+            name=request.displayName,
+            picture=request.pictureUrl,
+            status_message=request.statusMessage,
+            access_token=request.access_token
+        )
+        
         if existing_user:
-            # Update existing user's LINE account info
-            line_account = {
-                "id": social_id,
-                "provider": "line",
-                "name": request.displayName,
-                "picture": request.pictureUrl,
-                "email": request.email,
-                "status_message": request.statusMessage,
-                "access_token": request.access_token
-            }
-            
-            update_data = {
-                "last_login": datetime.utcnow().isoformat(),
-                "connected_accounts": {
-                    "line": line_account
+            # Update existing user
+            updated_user = await Database.update_user(
+                social_id=social_id,
+                provider="line",
+                update_data={
+                    "last_login": datetime.utcnow().isoformat(),
+                    "connected_accounts": {
+                        "line": line_account.dict()
+                    }
                 }
-            }
-            
-            updated_user = await Database.update_user(social_id, "line", update_data)
+            )
             return {"user": updated_user, "is_new": False}
             
         else:
-            # Create new user with LINE as primary account
+            # Create new user
             new_user = {
-                "id": f"line_{social_id}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{str(uuid.uuid4())[:8]}",
-                "primary_account": {
-                    "id": social_id,
-                    "provider": "line",
-                    "name": request.displayName,
-                    "picture": request.pictureUrl,
-                    "email": request.email,
-                    "status_message": request.statusMessage,
-                    "access_token": request.access_token
-                },
+                "name": request.displayName,
+                "picture": request.pictureUrl,
+                "email": "",  # LINE doesn't provide email
+                "primary_account": "LINE",
                 "connected_accounts": {
-                    "line": {
-                        "id": social_id,
-                        "provider": "line",
-                        "name": request.displayName,
-                        "picture": request.pictureUrl,
-                        "email": request.email,
-                        "status_message": request.statusMessage,
-                        "access_token": request.access_token
-                    }
+                    "line": line_account.dict()
                 },
                 "last_login": datetime.utcnow().isoformat(),
                 "created_at": datetime.utcnow().isoformat()
@@ -114,54 +127,52 @@ async def line_auth(request: LineAuthRequest):
 @app.post("/api/auth/social/google")
 async def google_auth(request: GoogleAuthRequest):
     try:
+        if not Database.client:
+            await Database.connect_db()
+            
         decoded = jwt.decode(
             request.credential,
             options={"verify_signature": False}
         )
         
         social_id = decoded["sub"]
+        name = decoded.get("name", "")
+        picture = decoded.get("picture", "")
+        email = decoded.get("email", "")
+        
         existing_user = await Database.get_user_by_social_id("google", social_id)
         
+        google_account = GoogleAccount(
+            id=social_id,
+            name=name,
+            picture=picture,
+            email=email,
+            access_token=request.credential
+        )
+        
         if existing_user:
-            google_account = {
-                "id": social_id,
-                "provider": "google",
-                "name": decoded.get("name", ""),
-                "picture": decoded.get("picture", ""),
-                "email": decoded.get("email", ""),
-                "access_token": request.credential
-            }
-            
-            update_data = {
-                "last_login": datetime.utcnow().isoformat(),
-                "connected_accounts": {
-                    "google": google_account
+            # Update existing user
+            updated_user = await Database.update_user(
+                social_id=social_id,
+                provider="google",
+                update_data={
+                    "last_login": datetime.utcnow().isoformat(),
+                    "connected_accounts": {
+                        "google": google_account.dict()
+                    }
                 }
-            }
-            
-            updated_user = await Database.update_user(social_id, "google", update_data)
+            )
             return {"user": updated_user, "is_new": False}
             
         else:
+            # Create new user
             new_user = {
-                "id": f"google_{social_id}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{str(uuid.uuid4())[:8]}",
-                "primary_account": {
-                    "id": social_id,
-                    "provider": "google",
-                    "name": decoded.get("name", ""),
-                    "picture": decoded.get("picture", ""),
-                    "email": decoded.get("email", ""),
-                    "access_token": request.credential
-                },
+                "name": name,
+                "picture": picture,
+                "email": email,
+                "primary_account": "Google",
                 "connected_accounts": {
-                    "google": {
-                        "id": social_id,
-                        "provider": "google",
-                        "name": decoded.get("name", ""),
-                        "picture": decoded.get("picture", ""),
-                        "email": decoded.get("email", ""),
-                        "access_token": request.credential
-                    }
+                    "google": google_account.dict()
                 },
                 "last_login": datetime.utcnow().isoformat(),
                 "created_at": datetime.utcnow().isoformat()
@@ -173,4 +184,13 @@ async def google_auth(request: GoogleAuthRequest):
     except Exception as e:
         print(f"Error in google_auth: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
-        
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    try:
+        if not Database.client:
+            await Database.connect_db()
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return {"status": "unhealthy", "error": str(e)}

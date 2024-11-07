@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import TitleBar from "@/components/custom/ui/TitleBar";
 import { ProfileCard, ProfileItem } from "@/components/custom/card/ProfileCard";
+import { ProfileHeader } from "@/components/custom/card/ProfileHeader";
 
 export default function AboutPage() {
   const profile = {
@@ -199,39 +200,19 @@ export default function AboutPage() {
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8">
       <TitleBar title="關於我" subtitle="我是誰？我在哪？" />
-      <Card className="bg-zinc-900 border-zinc-800 mb-6 mt-6">
-        <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-6">
-            <img
-              src={profile.avatar}
-              alt={profile.name}
-              className="w-32 h-32 rounded-full"
-            />
-            <div>
-              <h1 className="text-2xl font-bold text-zinc-200">
-                {profile.name}
-              </h1>
-              <p className="text-zinc-400">{profile.role}</p>
-              <p className="text-zinc-500 flex items-center gap-2">
-                <span>{profile.location}</span>
-              </p>
-              <p className="text-zinc-500">{profile.connections}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Signature size={20} />
-            About
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-zinc-400 whitespace-pre-line">{profile.about}</p>
-        </CardContent>
-      </Card>
+      <ProfileHeader
+        avatar={profile.avatar}
+        name={profile.name}
+        role={profile.role}
+        location={profile.location}
+        connections={profile.connections}
+      />
+
+      {/* 關於我 */}
+      <ProfileCard icon={Signature} title="About">
+        <p className="text-zinc-400 whitespace-pre-line">{profile.about}</p>
+      </ProfileCard>
 
       {/* 工作經驗 */}
       <ProfileCard icon={Briefcase} title="Experience">

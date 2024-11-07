@@ -66,6 +66,33 @@ export default function ProfilePage() {
     }
   }, [navigate]);
 
+  const formatDateTime = (isoString: string) => {
+    try {
+      // 解析 UTC 時間字符串
+      const utcDate = new Date(isoString + "Z"); // 添加 'Z' 來確保解析為 UTC
+
+      // 計算 UTC+8 的時間（台北時區）
+      const taipeiOffset = 8 * 60 * 60 * 1000; // 8 小時的毫秒數
+      const taipeiDate = new Date(utcDate.getTime() + taipeiOffset);
+
+      // 格式化為台灣習慣的日期時間格式
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+
+      return taipeiDate.toLocaleString("zh-TW", options);
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "時間格式錯誤";
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
     toast({
@@ -77,6 +104,92 @@ export default function ProfilePage() {
 
   const isConnected = (provider: "google" | "line") => {
     return userInfo?.connected_accounts?.[provider] !== undefined;
+  };
+
+  const DeleteAccountDialog = () => {
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteAccount = async () => {
+      if (!userInfo) return;
+
+      try {
+        setIsDeleting(true);
+        const response = await fetch(
+          `http://localhost:8000/api/users/${userInfo.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || "刪除帳號失敗");
+        }
+
+        // 清除本地儲存的用戶資訊
+        localStorage.removeItem("userInfo");
+
+        toast({
+          title: "帳號已刪除",
+          description: "您的帳號已經成功刪除。",
+        });
+
+        navigate("/login");
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "刪除失敗",
+          description:
+            error instanceof Error
+              ? error.message
+              : "刪除帳號時發生錯誤，請稍後再試。",
+        });
+      } finally {
+        setIsDeleting(false);
+      }
+    };
+
+    return (
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            variant="destructive"
+            size="sm"
+            className="bg-red-900 hover:bg-red-800"
+          >
+            刪除帳號
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="bg-zinc-900 border-zinc-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-zinc-400">
+              確定要刪除帳號嗎？
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              此操作無法復原。刪除帳號後，您的所有資料將被永久移除。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400"
+              disabled={isDeleting}
+            >
+              取消
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              className="bg-red-500 hover:bg-red-600"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "刪除中..." : "確定刪除"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
   };
 
   if (!userInfo) {
@@ -171,12 +284,12 @@ export default function ProfilePage() {
             <ProfileItem
               icon={Calendar}
               title="註冊時間"
-              subtitle={new Date(userInfo.created_at).toLocaleString("zh-TW")}
+              subtitle={formatDateTime(userInfo.created_at)}
             />
             <ProfileItem
               icon={Clock}
               title="上次登入"
-              subtitle={new Date(userInfo.last_login).toLocaleString("zh-TW")}
+              subtitle={formatDateTime(userInfo.last_login)}
             />
           </div>
         </div>
@@ -192,44 +305,59 @@ export default function ProfilePage() {
 
       {/* 帳號安全 */}
       <ProfileCard icon={AlertCircle} title="帳號安全">
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-3">
-            <LogOut className="w-5 h-5 text-zinc-400" />
-            <div>
-              <div className="font-medium text-zinc-400">登出帳號</div>
-              <div className="text-sm text-zinc-500">
-                登出後需要重新登入才能使用完整功能
+        <div className="space-y-4">
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-3">
+              <LogOut className="w-5 h-5 text-zinc-400" />
+              <div>
+                <div className="font-medium text-zinc-400">登出帳號</div>
+                <div className="text-sm text-zinc-500">
+                  登出後需要重新登入才能使用完整功能
+                </div>
               </div>
             </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  登出
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="bg-zinc-900 border-zinc-800">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-zinc-400">
+                    確定要登出嗎？
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    登出後需要重新登入才能使用完整功能。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+                    取消
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleLogout}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
+                    確定登出
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
-                登出
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="bg-zinc-900 border-zinc-800">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-zinc-400">
-                  確定要登出嗎？
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  登出後需要重新登入才能使用完整功能。
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
-                  取消
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-600"
-                >
-                  確定登出
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+
+          <div className="flex justify-between items-center w-full pt-2 border-t border-zinc-800">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400" />
+              <div>
+                <div className="font-medium text-red-400">刪除帳號</div>
+                <div className="text-sm text-zinc-500">
+                  刪除後所有資料將永久移除，此操作無法復原
+                </div>
+              </div>
+            </div>
+            <DeleteAccountDialog />
+          </div>
         </div>
       </ProfileCard>
     </div>

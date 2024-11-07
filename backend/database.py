@@ -97,3 +97,15 @@ class Database:
         except Exception as e:
             print(f"Error updating user: {e}")
             raise e
+        
+    @classmethod
+    async def delete_user(cls, user_id: str) -> bool:
+        if not cls.client:
+            raise Exception("Database not connected")
+            
+        try:
+            result = await cls.db.users.delete_one({"_id": ObjectId(user_id)})
+            return result.deleted_count > 0
+        except Exception as e:
+            print(f"Error deleting user: {e}")
+            raise e

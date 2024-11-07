@@ -185,6 +185,22 @@ async def google_auth(request: GoogleAuthRequest):
         print(f"Error in google_auth: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.delete("/api/users/{user_id}")
+async def delete_user(user_id: str):
+    try:
+        if not Database.client:
+            await Database.connect_db()
+            
+        success = await Database.delete_user(user_id)
+        if success:
+            return {"message": "用戶已成功刪除"}
+        else:
+            raise HTTPException(status_code=404, detail="找不到指定用戶")
+            
+    except Exception as e:
+        print(f"Error in delete_user: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+        
 # Health check endpoint
 @app.get("/health")
 async def health_check():

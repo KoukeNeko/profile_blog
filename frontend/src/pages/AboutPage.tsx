@@ -11,6 +11,7 @@ import {
   Code, // 專案
   Signature,
 } from "lucide-react";
+import TitleBar from "@/components/custom/TitleBar";
 
 export default function AboutPage() {
   const profile = {
@@ -196,7 +197,8 @@ export default function AboutPage() {
 
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8">
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
+      <TitleBar title="關於我" subtitle="我是誰？我在哪？" />
+      <Card className="bg-zinc-900 border-zinc-800 mb-6 mt-6">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <img
@@ -220,7 +222,7 @@ export default function AboutPage() {
 
       <Card className="bg-zinc-900 border-zinc-800 mb-6">
         <CardHeader>
-        <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
+          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
             <Signature size={20} />
             About
           </CardTitle>

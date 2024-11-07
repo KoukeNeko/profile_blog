@@ -194,7 +194,7 @@ export default function ProfilePage() {
       <ProfileCard icon={AlertCircle} title="帳號安全">
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-3">
-            <LogOut className="w-5 h-5" />
+            <LogOut className="w-5 h-5 text-zinc-400" />
             <div>
               <div className="font-medium text-zinc-400">登出帳號</div>
               <div className="text-sm text-zinc-500">

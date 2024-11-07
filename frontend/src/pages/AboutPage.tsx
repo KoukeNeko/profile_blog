@@ -12,6 +12,7 @@ import {
   Signature,
 } from "lucide-react";
 import TitleBar from "@/components/custom/ui/TitleBar";
+import { ProfileCard, ProfileItem } from "@/components/custom/card/ProfileCard";
 
 export default function AboutPage() {
   const profile = {
@@ -233,220 +234,124 @@ export default function AboutPage() {
       </Card>
 
       {/* 工作經驗 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Briefcase size={20} />
-            Experience
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.experience.map((exp, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <Briefcase className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{exp.title}</h3>
-                  <p className="text-zinc-400">{exp.company}</p>
-                  <p className="text-sm text-zinc-500">{exp.period}</p>
-                  <p className="text-sm text-zinc-500">{exp.location}</p>
-                  <ul className="list-disc list-inside text-zinc-400 mt-2">
-                    {exp.description.map((desc, i) => (
-                      <li key={i}>{desc}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={Briefcase} title="Experience">
+        {profile.experience.map((exp, index) => (
+          <ProfileItem
+            key={index}
+            icon={Briefcase}
+            title={exp.title}
+            subtitle={exp.company}
+            period={exp.period}
+            location={exp.location}
+            description={exp.description}
+          />
+        ))}
+      </ProfileCard>
 
       {/* 教育背景 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <GraduationCap size={20} />
-            Education
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.education.map((edu, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <GraduationCap className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{edu.school}</h3>
-                  <p className="text-zinc-400">
-                    {edu.degree} · {edu.field}
-                  </p>
-                  <p className="text-sm text-zinc-500">{edu.period}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={GraduationCap} title="Education">
+        {profile.education.map((edu, index) => (
+          <ProfileItem
+            key={index}
+            icon={GraduationCap}
+            title={edu.school}
+            subtitle={`${edu.degree} · ${edu.field}`}
+            period={edu.period}
+          />
+        ))}
+      </ProfileCard>
 
       {/* 證照與認證 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Award size={20} />
-            Licenses & Certifications
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.certifications.map((cert, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <Award className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-medium text-zinc-200">{cert.name}</h3>
-                  <p className="text-zinc-400">{cert.issuer}</p>
-                  <p className="text-sm text-zinc-500">發行於 {cert.issued}</p>
-                  {cert.credentialId && (
-                    <p className="text-sm text-zinc-500">
-                      證書編號：{cert.credentialId}
-                    </p>
-                  )}
-                  {cert.link && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-2 text-xs text-neutral-700 border-neutral-700 bg-transparent"
-                      onClick={() => window.open(cert.link, "_blank")}
-                    >
-                      See credential
-                      <ExternalLink size={12} className="ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={Award} title="Licenses & Certifications">
+        {profile.certifications.map((cert, index) => (
+          <ProfileItem
+            key={index}
+            icon={Award}
+            title={cert.name}
+            subtitle={cert.issuer}
+            period={`發行於 ${cert.issued}`}
+            extra={
+              <>
+                {cert.credentialId && (
+                  <p className="text-sm text-zinc-500">
+                    證書編號：{cert.credentialId}
+                  </p>
+                )}
+                {cert.link && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 text-xs text-neutral-700 border-neutral-700 bg-transparent"
+                    onClick={() => window.open(cert.link, "_blank")}
+                  >
+                    See credential
+                    <ExternalLink size={12} className="ml-1" />
+                  </Button>
+                )}
+              </>
+            }
+          />
+        ))}
+      </ProfileCard>
 
       {/* 志願服務 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Calendar size={20} />
-            Volunteer Experience
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.volunteer.map((vol, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <Calendar className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{vol.role}</h3>
-                  <p className="text-zinc-400">{vol.organization}</p>
-                  {vol.description && (
-                    <ul className="list-disc list-inside text-zinc-400 mt-2">
-                      {vol.description.map((desc, i) => (
-                        <li key={i}>{desc}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={Calendar} title="Volunteer Experience">
+        {profile.volunteer.map((vol, index) => (
+          <ProfileItem
+            key={index}
+            icon={Calendar}
+            title={vol.role}
+            subtitle={vol.organization}
+            period={vol.period}
+            description={vol.description}
+          />
+        ))}
+      </ProfileCard>
 
       {/* 專案經驗 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Code size={20} />
-            Projects
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.projects.map((project, index) => (
-            <div key={index} className="mb-6 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <Code className="w-6 h-6 text-zinc-400" />
+      <ProfileCard icon={Code} title="Projects">
+        {profile.projects.map((project, index) => (
+          <ProfileItem
+            key={index}
+            icon={Code}
+            title={project.name}
+            period={project.period}
+            description={project.description}
+            extra={
+              project.collaborators && (
+                <div className="mt-2 text-zinc-500">
+                  合作者：{project.collaborators.join(", ")}
                 </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{project.name}</h3>
-                  <p className="text-sm text-zinc-500">{project.period}</p>
-                  <p className="text-zinc-400 mt-2">{project.description}</p>
-                  {project.collaborators && (
-                    <div className="mt-2 text-zinc-500">
-                      合作者：{project.collaborators.join(", ")}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+              )
+            }
+          />
+        ))}
+      </ProfileCard>
 
       {/* 成績 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <LucideBookOpen size={20} />
-            Test Scores
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.scores.map((score, index) => (
-            <div key={index} className="mb-4 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <LucideBookOpen className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{score.test}</h3>
-                  <p className="text-zinc-400">分數：{score.score}</p>
-                  <p className="text-sm text-zinc-500">{score.date}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={LucideBookOpen} title="Test Scores">
+        {profile.scores.map((score, index) => (
+          <ProfileItem
+            key={index}
+            icon={LucideBookOpen}
+            title={score.test}
+            subtitle={`分數：${score.score}`}
+            period={score.date}
+          />
+        ))}
+      </ProfileCard>
 
       {/* 語言能力 */}
-      <Card className="bg-zinc-900 border-zinc-800 mb-6">
-        <CardHeader>
-          <CardTitle className="text-xl text-zinc-200 flex items-center gap-2">
-            <Globe size={20} />
-            Languages
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {profile.languages.map((lang, index) => (
-            <div key={index} className="mb-4 last:mb-0">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-md flex items-center justify-center shrink-0">
-                  <Globe className="w-6 h-6 text-zinc-400" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-zinc-200">{lang.name}</h3>
-                  <p className="text-zinc-400">{lang.level}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <ProfileCard icon={Globe} title="Languages">
+        {profile.languages.map((lang, index) => (
+          <ProfileItem
+            key={index}
+            icon={Globe}
+            title={lang.name}
+            subtitle={lang.level}
+          />
+        ))}
+      </ProfileCard>
     </div>
   );
 }

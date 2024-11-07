@@ -8,6 +8,9 @@ import BlogPage from "@/pages/BlogPage";
 import ProjectPage from "@/pages/ProjectPage";
 import AboutPage from "@/pages/AboutPage";
 
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+
 // Wrapper component to handle layout logic
 const MainContent = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -39,6 +42,9 @@ function App() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/about" element={<AboutPage />} />
+
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>
           </MainContent>
           <Footer />

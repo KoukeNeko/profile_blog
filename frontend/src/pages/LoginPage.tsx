@@ -1,11 +1,18 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Link, useNavigate } from "react-router-dom";
 export default function LoginPage() {
+  const navigate = useNavigate();
   const handleGoogleLogin = () => {
     // 處理 Google 登入邏輯
-    console.log('Initiating Google login...')
-  }
+    console.log("Initiating Google login...");
+  };
 
   return (
     <main className="flex-grow flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
@@ -17,14 +24,11 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center space-y-8">
-          <Button 
+          <Button
             onClick={handleGoogleLogin}
             className="w-full max-w-md h-14 relative flex items-center justify-center gap-3 bg-white hover:bg-zinc-50 text-zinc-800 text-lg"
           >
-            <svg 
-              className="w-6 h-6" 
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -44,15 +48,23 @@ export default function LoginPage() {
             </svg>
             使用 Google 帳號登入
           </Button>
-          
+
           <div className="text-center text-zinc-500">
             <p className="text-sm mb-2">登入即表示您同意我們的</p>
             <div className="space-x-1">
-              <Button variant="link" className="p-0 text-sm text-zinc-500 hover:text-zinc-400">
+              <Button
+                onClick={() => navigate("/terms")}
+                variant="link"
+                className="p-0 text-sm text-zinc-500 hover:text-zinc-400"
+              >
                 服務條款
               </Button>
               <span>和</span>
-              <Button variant="link" className="p-0 text-sm text-zinc-500 hover:text-zinc-400">
+              <Button
+                onClick={() => navigate("/privacy")}
+                variant="link"
+                className="p-0 text-sm text-zinc-500 hover:text-zinc-400"
+              >
                 隱私權政策
               </Button>
             </div>
@@ -60,5 +72,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </main>
-  )
+  );
 }

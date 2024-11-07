@@ -18,23 +18,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import TitleBar from "@/components/custom/ui/TitleBar";
+import type { Article, ArticleCardProps } from "@/types/blog";
 
-interface Article {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-}
-
-const ArticleCard = ({
-  article,
-  index,
-}: {
-  article: Article;
-  index: number;
-}) => {
+const ArticleCard = ({ article, index }: ArticleCardProps) => {
   const titleDelay = index * 100;
   const descDelay = titleDelay + 200;
 
@@ -82,7 +68,7 @@ const BlogPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 9;
 
-  const allArticles = [
+  const allArticles: Article[] = [
     {
       id: 1,
       title: "使用 React 和 TypeScript 建立現代化網站",

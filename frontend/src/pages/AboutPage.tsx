@@ -10,7 +10,6 @@ import {
   Calendar,
   Code,
   Signature,
-  LucideIcon,
 } from "lucide-react";
 import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 import TitleBar from "@/components/custom/ui/TitleBar";

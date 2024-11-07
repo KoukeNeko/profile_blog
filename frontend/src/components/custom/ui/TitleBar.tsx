@@ -1,5 +1,5 @@
 import React from 'react';
-import TypewriterText from "@/components/custom/ui/typewriter_gpt_style";
+import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 
 interface TitleBarProps {
   title: string;

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import NavBar from "@/components/custom/NavBar";
-import Footer from "@/components/custom/Footer";
-import ToTopButton from "@/components/custom/ToTopButton";
+import NavBar from "@/components/custom/ui/NavBar";
+import Footer from "@/components/custom/ui/Footer";
+import ToTopButton from "@/components/custom/ui/ToTopButton";
 import Homepage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import BlogPage from "@/pages/BlogPage";

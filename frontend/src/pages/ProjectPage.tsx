@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TypewriterText from "@/components/custom/ui/typewriter_gpt_style";
+import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 import { CalendarDays, Github, Globe, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import TitleBar from "@/components/custom/TitleBar";
+import TitleBar from "@/components/custom/ui/TitleBar";
 
 interface Project {
   id: number;

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import TypewriterText from "@/components/custom/ui/typewriter_gpt_style";
+import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 import {
   HoverCard,
   HoverCardContent,

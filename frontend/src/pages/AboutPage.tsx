@@ -11,7 +11,7 @@ import {
   Code, // 專案
   Signature,
 } from "lucide-react";
-import TitleBar from "@/components/custom/TitleBar";
+import TitleBar from "@/components/custom/ui/TitleBar";
 
 export default function AboutPage() {
   const profile = {

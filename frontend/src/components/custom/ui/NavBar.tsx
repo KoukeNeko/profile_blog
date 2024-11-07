@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Settings, Menu, Signature, ReceiptText, Code } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {

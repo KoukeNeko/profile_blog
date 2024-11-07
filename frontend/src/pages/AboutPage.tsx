@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Briefcase,
@@ -17,22 +17,9 @@ import TitleBar from "@/components/custom/ui/TitleBar";
 import { ProfileCard, ProfileItem } from "@/components/custom/card/ProfileCard";
 import { ProfileHeader } from "@/components/custom/card/ProfileHeader";
 import type { Profile, Experience, Education, Certification, Volunteer, Project, Score, Language } from "@/types/profile";
+import type { TypewriterProfileItemProps } from "@/types/ui";
 
 import { fetchProfileData } from "@/utils/api";
-
-interface TypewriterProfileItemProps {
-  icon: LucideIcon;
-  title: string;
-  subtitle?: string;
-  period?: string;
-  location?: string;
-  description?: string | string[];
-  extra?: ReactNode;
-  index?: number;
-  baseDelay?: number;
-}
-
-
 
 const TypewriterProfileItem: React.FC<TypewriterProfileItemProps> = ({
   icon: Icon,
@@ -135,7 +122,7 @@ export default function AboutPage() {
     );
   }
 
-  const baseDelay = 500; // 基礎延遲時間
+  const baseDelay = 500;
 
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8">
@@ -317,10 +304,6 @@ export default function AboutPage() {
             icon={Globe}
             title={lang.name}
             subtitle={lang.level}
-            period={undefined}
-            location={undefined}
-            description={undefined}
-            extra={undefined}
             index={index}
             baseDelay={baseDelay + 1800}
           />

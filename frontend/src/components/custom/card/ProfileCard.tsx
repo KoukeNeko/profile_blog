@@ -1,12 +1,6 @@
 import { ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon } from 'lucide-react';
-
-interface ProfileCardProps {
-  icon: LucideIcon;
-  title: ReactNode;
-  children: ReactNode;
-}
+import type { ProfileItemProps,  ProfileCardProps} from "@/types/ui";
 
 export function ProfileCard({ icon: Icon, title, children }: ProfileCardProps) {
   return (
@@ -23,18 +17,6 @@ export function ProfileCard({ icon: Icon, title, children }: ProfileCardProps) {
     </Card>
   );
 }
-
-
-// 可重用的個人資料項目元件
-interface ProfileItemProps {
-    icon: LucideIcon;
-    title: ReactNode;
-    subtitle?: ReactNode;
-    period?: ReactNode;
-    location?: ReactNode;
-    description?: ReactNode;
-    extra?: ReactNode;
-  }
   
 
   export function ProfileItem({ 

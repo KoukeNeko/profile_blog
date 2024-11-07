@@ -28,8 +28,6 @@ export default function LoginPage() {
         picture: decoded.picture,
       };
       
-      console.log('User Info:', userInfo);
-      
       // 添加一個登入狀態標記
       sessionStorage.setItem('justLoggedIn', 'true');
       localStorage.setItem('userInfo', JSON.stringify(userInfo));

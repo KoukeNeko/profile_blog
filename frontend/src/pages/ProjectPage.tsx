@@ -19,28 +19,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import TitleBar from "@/components/custom/ui/TitleBar";
+import type { Project, ProjectCardProps } from "@/types/project";
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  longDescription: string;
-  date: string;
-  technologies: string[];
-  links: {
-    github?: string;
-    demo?: string;
-  };
-  image?: string;
-}
-
-const ProjectCard = ({
-  project,
-  index,
-}: {
-  project: Project;
-  index: number;
-}) => {
+const ProjectCard = ({ project, index }: ProjectCardProps) => {
   const titleDelay = index * 100;
   const descDelay = titleDelay + 200;
 
@@ -111,7 +92,7 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 5; // Show 5 projects per page
 
-  const allProjects = [
+  const allProjects: Project[] = [
     {
       id: 1,
       title: "基於LoRaWAN 技術之電器管理系統",
@@ -129,7 +110,7 @@ const ProjectPage = () => {
       title: "個人作品集網站",
       description: "使用 React 和 TypeScript 打造的個人網站",
       longDescription:
-        "採用現代化的前端技術棧構建的個人網站，展示專業經歷、項目作品和技術部落格。整合了深色主題、響應式設計和流暢的動畫效果。",
+        "採用現代化的前端技術棧構建的個人網站，展示專業經歷、專案作品和技術部落格。整合了深色主題、響應式設計和流暢的動畫效果。",
       date: "2024-02 ~ Present",
       technologies: ["React", "TypeScript", "Tailwind CSS", "Next.js"],
       links: {
@@ -140,9 +121,9 @@ const ProjectPage = () => {
     {
       id: 3,
       title: "智慧校園資訊系統",
-      description: "整合型校園管理與信息平台",
+      description: "整合型校園管理與資訊平臺",
       longDescription:
-        "為學校開發的綜合信息管理系統，包含學生信息管理、課程安排、成績管理等功能。採用微服務架構，確保系統的可擴展性和維護性。",
+        "為學校開發的綜合資訊管理系統，包含學生資訊管理、課程安排、成績管理等功能。採用微服務架構，確保系統的可擴充套件性和維護性。",
       date: "2023-03 ~ 2023-06",
       technologies: ["Java", "Spring Boot", "Vue.js", "MySQL", "Docker"],
       links: {
@@ -151,10 +132,10 @@ const ProjectPage = () => {
     },
     {
       id: 4,
-      title: "AI 輔助學習平台",
+      title: "AI 輔助學習平臺",
       description: "基於機器學習的個性化學習系統",
       longDescription:
-        "運用AI技術分析學生學習行為，提供個性化學習建議和適應性練習。整合了自然語言處理技術，支持智能問答功能。",
+        "運用AI技術分析學生學習行為，提供個性化學習建議和適應性練習。整合了自然語言處理技術，支援智慧問答功能。",
       date: "2023-09 ~ 2024-01",
       technologies: ["Python", "TensorFlow", "FastAPI", "React", "PostgreSQL"],
       links: {
@@ -165,9 +146,9 @@ const ProjectPage = () => {
     {
       id: 5,
       title: "區塊鏈投票系統",
-      description: "安全可信的電子投票平台",
+      description: "安全可信的電子投票平臺",
       longDescription:
-        "基於區塊鏈技術開發的電子投票系統，確保投票過程的透明性和不可篡改性。支持多種投票方式，並提供實時結果統計。",
+        "基於區塊鏈技術開發的電子投票系統，確保投票過程的透明性和不可篡改性。支援多種投票方式，並提供實時結果統計。",
       date: "2023-01 ~ 2023-05",
       technologies: ["Solidity", "Ethereum", "Web3.js", "React", "Node.js"],
       links: {
@@ -177,10 +158,10 @@ const ProjectPage = () => {
     },
     {
       id: 6,
-      title: "即時協作文檔系統",
-      description: "多人即時編輯的文檔平台",
+      title: "即時協作文件系統",
+      description: "多人即時編輯的文件平臺",
       longDescription:
-        "支持多人同時編輯的協作文檔系統，實現了操作轉換算法(OT)，確保數據一致性。集成版本控制和權限管理功能。",
+        "支援多人同時編輯的協作文件系統，實現了操作轉換演算法(OT)，確保資料一致性。整合版本控制和許可權管理功能。",
       date: "2022-08 ~ 2022-12",
       technologies: ["TypeScript", "Socket.IO", "MongoDB", "Redis", "Docker"],
       links: {

@@ -190,7 +190,7 @@ function Homepage() {
           </HoverCardContent>
         </HoverCard>
       </div>
-      <Toaster theme="dark"/>
+      <Toaster/>
     </>
   );
 }

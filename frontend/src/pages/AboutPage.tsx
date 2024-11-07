@@ -2,22 +2,51 @@ import {useEffect, useState} from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  Briefcase, // 經歷
-  GraduationCap, // 學歷
-  Award, // 證照
-  LucideBookOpen, // 成績
-  Globe, // 語言
-  ExternalLink, // 外部連結
-  Calendar, // 志願服務
-  Code, // 專案
+  Briefcase,
+  GraduationCap,
+  Award,
+  LucideBookOpen,
+  Globe,
+  ExternalLink,
+  Calendar,
+  Code,
   Signature,
 } from "lucide-react";
+import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 import TitleBar from "@/components/custom/ui/TitleBar";
 import { ProfileCard, ProfileItem } from "@/components/custom/card/ProfileCard";
 import { ProfileHeader } from "@/components/custom/card/ProfileHeader";
 
-
 import { fetchProfileData } from "@/utils/api";
+
+const TypewriterProfileItem = ({
+  icon: Icon,
+  title,
+  subtitle,
+  period,
+  location,
+  description,
+  extra,
+  index = 0,
+  baseDelay = 0
+}) => {
+  const titleDelay = baseDelay + index * 100;
+  const subtitleDelay = titleDelay + 100;
+  const periodDelay = subtitleDelay + 100;
+  const descriptionDelay = periodDelay + 100;
+
+  return (
+    <ProfileItem
+      icon={Icon}
+      title={<TypewriterText text={title} delay={titleDelay} />}
+      subtitle={subtitle && <TypewriterText text={subtitle} delay={subtitleDelay} />}
+      period={period && <TypewriterText text={period} delay={periodDelay} />}
+      location={location && <TypewriterText text={location} delay={periodDelay} />}
+      description={description && <TypewriterText text={description} delay={descriptionDelay} />}
+      extra={extra}
+    />
+  );
+};
 
 export default function AboutPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -44,7 +73,11 @@ export default function AboutPage() {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-zinc-400">Loading...</div>
+          <TypewriterText 
+            text="Loading Profile Data..." 
+            typingDelay={50}
+            randomVariation={30}
+          />
         </div>
       </div>
     );
@@ -54,7 +87,9 @@ export default function AboutPage() {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-red-400">Error: {error}</div>
+          <div className="text-red-400">
+            <TypewriterText text={`Error: ${error}`} typingDelay={50} />
+          </div>
         </div>
       </div>
     );
@@ -64,33 +99,48 @@ export default function AboutPage() {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-zinc-400">No profile data available</div>
+          <div className="text-zinc-400">
+            <TypewriterText text="No profile data available" typingDelay={50} />
+          </div>
         </div>
       </div>
     );
   }
 
+  const baseDelay = 500; // 基礎延遲時間
+
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8">
-      <TitleBar title="關於我" subtitle="我是誰？我在哪？" />
+      <TitleBar 
+        title={<TypewriterText text="關於我" delay={0} />}
+        subtitle={<TypewriterText text="我是誰？我在哪？" delay={200} />}
+      />
 
       <ProfileHeader
         avatar={profile.avatar}
-        name={profile.name}
-        role={profile.role}
-        location={profile.location}
+        name={<TypewriterText text={profile.name} delay={300} />}
+        role={<TypewriterText text={profile.role} delay={400} />}
+        location={<TypewriterText text={profile.location} delay={500} />}
         connections={profile.connections}
       />
 
       {/* 關於我 */}
-      <ProfileCard icon={Signature} title="About">
-        <p className="text-zinc-400 whitespace-pre-line">{profile.about}</p>
+      <ProfileCard 
+        icon={Signature} 
+        title={<TypewriterText text="About" delay={baseDelay} />}
+      >
+        <p className="text-zinc-400 whitespace-pre-line">
+          <TypewriterText text={profile.about} delay={0} />
+        </p>
       </ProfileCard>
 
       {/* 工作經驗 */}
-      <ProfileCard icon={Briefcase} title="Experience">
+      <ProfileCard 
+        icon={Briefcase} 
+        title={<TypewriterText text="Experience" delay={baseDelay + 200} />}
+      >
         {profile.experience.map((exp, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={Briefcase}
             title={exp.title}
@@ -98,37 +148,52 @@ export default function AboutPage() {
             period={exp.period}
             location={exp.location}
             description={exp.description}
+            index={index}
+            baseDelay={baseDelay + 300}
           />
         ))}
       </ProfileCard>
 
       {/* 教育背景 */}
-      <ProfileCard icon={GraduationCap} title="Education">
+      <ProfileCard 
+        icon={GraduationCap} 
+        title={<TypewriterText text="Education" delay={baseDelay + 400} />}
+      >
         {profile.education.map((edu, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={GraduationCap}
             title={edu.school}
             subtitle={`${edu.degree} · ${edu.field}`}
             period={edu.period}
+            index={index}
+            baseDelay={baseDelay + 500}
           />
         ))}
       </ProfileCard>
 
       {/* 證照與認證 */}
-      <ProfileCard icon={Award} title="Licenses & Certifications">
+      <ProfileCard 
+        icon={Award} 
+        title={<TypewriterText text="Licenses & Certifications" delay={baseDelay + 600} />}
+      >
         {profile.certifications.map((cert, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={Award}
             title={cert.name}
             subtitle={cert.issuer}
             period={`發行於 ${cert.issued}`}
+            index={index}
+            baseDelay={baseDelay + 700}
             extra={
               <>
                 {cert.credentialId && (
                   <p className="text-sm text-zinc-500">
-                    證書編號：{cert.credentialId}
+                    <TypewriterText 
+                      text={`證書編號：${cert.credentialId}`}
+                      delay={baseDelay + 800 + index * 100}
+                    />
                   </p>
                 )}
                 {cert.link && (
@@ -138,7 +203,7 @@ export default function AboutPage() {
                     className="mt-2 text-xs text-neutral-700 border-neutral-700 bg-transparent"
                     onClick={() => window.open(cert.link, "_blank")}
                   >
-                    See credential
+                    <TypewriterText text="See credential" delay={baseDelay + 900 + index * 100} />
                     <ExternalLink size={12} className="ml-1" />
                   </Button>
                 )}
@@ -149,32 +214,45 @@ export default function AboutPage() {
       </ProfileCard>
 
       {/* 志願服務 */}
-      <ProfileCard icon={Calendar} title="Volunteer Experience">
+      <ProfileCard 
+        icon={Calendar} 
+        title={<TypewriterText text="Volunteer Experience" delay={baseDelay + 1000} />}
+      >
         {profile.volunteer.map((vol, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={Calendar}
             title={vol.role}
             subtitle={vol.organization}
             period={vol.period}
             description={vol.description}
+            index={index}
+            baseDelay={baseDelay + 1100}
           />
         ))}
       </ProfileCard>
 
       {/* 專案經驗 */}
-      <ProfileCard icon={Code} title="Projects">
+      <ProfileCard 
+        icon={Code} 
+        title={<TypewriterText text="Projects" delay={baseDelay + 1200} />}
+      >
         {profile.projects.map((project, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={Code}
             title={project.name}
             period={project.period}
             description={project.description}
+            index={index}
+            baseDelay={baseDelay + 1300}
             extra={
               project.collaborators && (
                 <div className="mt-2 text-zinc-500">
-                  合作者：{project.collaborators.join(", ")}
+                  <TypewriterText 
+                    text={`合作者：${project.collaborators.join(", ")}`}
+                    delay={baseDelay + 1400 + index * 100}
+                  />
                 </div>
               )
             }
@@ -183,26 +261,36 @@ export default function AboutPage() {
       </ProfileCard>
 
       {/* 成績 */}
-      <ProfileCard icon={LucideBookOpen} title="Test Scores">
+      <ProfileCard 
+        icon={LucideBookOpen} 
+        title={<TypewriterText text="Test Scores" delay={baseDelay + 1500} />}
+      >
         {profile.scores.map((score, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={LucideBookOpen}
             title={score.test}
             subtitle={`分數：${score.score}`}
             period={score.date}
+            index={index}
+            baseDelay={baseDelay + 1600}
           />
         ))}
       </ProfileCard>
 
       {/* 語言能力 */}
-      <ProfileCard icon={Globe} title="Languages">
+      <ProfileCard 
+        icon={Globe} 
+        title={<TypewriterText text="Languages" delay={baseDelay + 1700} />}
+      >
         {profile.languages.map((lang, index) => (
-          <ProfileItem
+          <TypewriterProfileItem
             key={index}
             icon={Globe}
             title={lang.name}
             subtitle={lang.level}
+            index={index}
+            baseDelay={baseDelay + 1800}
           />
         ))}
       </ProfileCard>

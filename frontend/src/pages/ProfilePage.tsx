@@ -68,28 +68,26 @@ export default function ProfilePage() {
 
   const formatDateTime = (isoString: string) => {
     try {
-      // 解析 UTC 時間字符串
-      const utcDate = new Date(isoString + "Z"); // 添加 'Z' 來確保解析為 UTC
-
-      // 計算 UTC+8 的時間（台北時區）
-      const taipeiOffset = 8 * 60 * 60 * 1000; // 8 小時的毫秒數
-      const taipeiDate = new Date(utcDate.getTime() + taipeiOffset);
-
-      // 格式化為台灣習慣的日期時間格式
-      const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
+      // 確保移除可能的毫秒部分並添加 Z 表示 UTC
+      const cleanIsoString = isoString.split('.')[0] + 'Z';
+      
+      // 解析為 Date 對象
+      const date = new Date(cleanIsoString);
+      
+      // 使用 toLocaleString 直接轉換為使用者目前的時間格式
+      return date.toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         hour12: false,
-      };
-
-      return taipeiDate.toLocaleString("zh-TW", options);
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone  // 使用者目前的時區
+      });
     } catch (error) {
-      console.error("Error formatting date:", error);
-      return "時間格式錯誤";
+      console.error('Error formatting date:', error);
+      return '時間格式錯誤';
     }
   };
 

@@ -9,6 +9,7 @@ from datetime import datetime
 import uuid
 from fastapi.encoders import jsonable_encoder
 from bson import ObjectId
+from datetime import datetime, timezone
 
 app = FastAPI()
 
@@ -95,7 +96,7 @@ async def line_auth(request: LineAuthRequest):
                 social_id=social_id,
                 provider="line",
                 update_data={
-                    "last_login": datetime.utcnow().isoformat(),
+                    "last_login": datetime.now(timezone.utc),
                     "connected_accounts": {
                         "line": line_account.dict()
                     }
@@ -113,8 +114,8 @@ async def line_auth(request: LineAuthRequest):
                 "connected_accounts": {
                     "line": line_account.dict()
                 },
-                "last_login": datetime.utcnow().isoformat(),
-                "created_at": datetime.utcnow().isoformat()
+                "last_login": datetime.now(timezone.utc),
+                "created_at": datetime.now(timezone.utc)
             }
             
             created_user = await Database.create_user(new_user)
@@ -156,7 +157,7 @@ async def google_auth(request: GoogleAuthRequest):
                 social_id=social_id,
                 provider="google",
                 update_data={
-                    "last_login": datetime.utcnow().isoformat(),
+                    "last_login": datetime.now(timezone.utc),
                     "connected_accounts": {
                         "google": google_account.dict()
                     }
@@ -174,8 +175,8 @@ async def google_auth(request: GoogleAuthRequest):
                 "connected_accounts": {
                     "google": google_account.dict()
                 },
-                "last_login": datetime.utcnow().isoformat(),
-                "created_at": datetime.utcnow().isoformat()
+                "last_login": datetime.now(timezone.utc),
+                "created_at": datetime.now(timezone.utc)
             }
             
             created_user = await Database.create_user(new_user)
@@ -200,7 +201,6 @@ async def delete_user(user_id: str):
     except Exception as e:
         print(f"Error in delete_user: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
-        
 # Health check endpoint
 @app.get("/health")
 async def health_check():

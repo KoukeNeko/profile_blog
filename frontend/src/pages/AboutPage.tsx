@@ -195,7 +195,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="container max-w-5xl mx-auto px-4 py-8">
+    <div className="container max-w-6xl mx-auto px-4 py-8">
       <Card className="bg-zinc-900 border-zinc-800 mb-6">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">

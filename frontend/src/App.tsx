@@ -5,6 +5,7 @@ import ToTopButton from "@/components/custom/ToTopButton";
 import Homepage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import BlogPage from "@/pages/BlogPage";
+import ProjectPage from "@/pages/ProjectPage";
 import AboutPage from "@/pages/AboutPage";
 
 // Wrapper component to handle layout logic
@@ -36,6 +37,7 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/blog" element={<BlogPage />} />
+              <Route path="/project" element={<ProjectPage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </MainContent>

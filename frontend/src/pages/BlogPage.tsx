@@ -212,85 +212,91 @@ interface Article {
     };
   
     return (
-      <div className="flex justify-center w-full">
-        <div className="container max-w-7xl px-4 py-6">
-          <div className="flex flex-col lg:flex-row gap-6">
-            <div className="w-full lg:flex-grow lg:max-w-3xl order-1">
-              <h1 className="text-2xl font-bold text-zinc-200 mb-6">
-                <TypewriterText text="最新文章" />
+        <div className="flex justify-center w-full">
+          <div className="container max-w-6xl px-4 py-8">
+            <div>
+              <h1 className="text-3xl font-bold text-zinc-200 mb-2">
+                <TypewriterText text="我的文章" />
               </h1>
-              <div className="space-y-4 lg:pr-4">
-                {currentArticles.map((article, index) => (
-                  <ArticleCard key={article.id} article={article} index={index} />
-                ))}
-              </div>
-  
-              {/* Pagination */}
-              <div className="mt-8">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        className={`${currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'} bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
-                      />
-                    </PaginationItem>
-                    
-                    {Array.from({ length: totalPages }).map((_, i) => (
-                      <PaginationItem key={i}>
-                        <PaginationLink
-                          onClick={() => handlePageChange(i + 1)}
-                          className={`${currentPage === i + 1 ? 'bg-zinc-600' : 'bg-zinc-800'} text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
-                        >
-                          {i + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    
-                    <PaginationItem>
-                      <PaginationNext 
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        className={`${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'} bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
+              <p className="text-zinc-400">
+                <TypewriterText text="分享技術知識與學習心得" delay={100} />
+              </p>
             </div>
-            
-            {/* Sidebar */}
-            <div className="lg:w-80 w-full order-2 space-y-4">
-              <Card className="bg-zinc-900 border-zinc-800">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-200">搜尋</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">搜尋功能即將推出...</p>
-                </CardContent>
-              </Card>
-  
-              <Card className="bg-zinc-900 border-zinc-800">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-200">分類</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">分類功能即將推出...</p>
-                </CardContent>
-              </Card>
-  
-              <Card className="bg-zinc-900 border-zinc-800">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-200">標籤雲</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">標籤雲功能即將推出...</p>
-                </CardContent>
-              </Card>
+    
+            <div className="flex gap-6 mt-6">
+              <div className="flex-grow max-w-4xl">
+                <div className="space-y-4">
+                  {currentArticles.map((article, index) => (
+                    <ArticleCard key={article.id} article={article} index={index} />
+                  ))}
+                </div>
+    
+                {/* Pagination */}
+                <div className="mt-8">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          className={`${currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'} bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }).map((_, i) => (
+                        <PaginationItem key={i}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(i + 1)}
+                            className={`${currentPage === i + 1 ? 'bg-zinc-600' : 'bg-zinc-800'} text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
+                          >
+                            {i + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          className={`${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'} bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-200`}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              </div>
+              
+              {/* Sidebar */}
+              <div className="w-72 hidden lg:block space-y-4">
+                <Card className="bg-zinc-900 border-zinc-800">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-zinc-200">搜尋</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-zinc-400">搜尋功能即將推出...</p>
+                  </CardContent>
+                </Card>
+    
+                <Card className="bg-zinc-900 border-zinc-800">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-zinc-200">分類</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-zinc-400">分類功能即將推出...</p>
+                  </CardContent>
+                </Card>
+    
+                <Card className="bg-zinc-900 border-zinc-800">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-zinc-200">標籤雲</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-zinc-400">標籤雲功能即將推出...</p>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  };
-  
-  export default BlogPage;
+      );
+    };
+
+export default BlogPage;

@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { Settings, Menu, Signature, ReceiptText } from "lucide-react";
+import { Settings, Menu, Signature, ReceiptText, Code } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -38,6 +38,14 @@ function NavBar() {
           >
             <ReceiptText className="mr-2" size={16} />
             Blog
+          </Button>
+          <Button
+            variant="ghost"
+            className="text-zinc-400"
+            onClick={() => navigate("/project")}
+          >
+            <Code className="mr-2" size={16} />
+            Project
           </Button>
           <Button
             variant="ghost"

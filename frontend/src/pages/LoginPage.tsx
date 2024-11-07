@@ -1,4 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
+import { v4 as uuidv4 } from 'uuid';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,15 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import * as jwtDecode from 'jwt-decode';
 import { useToast } from "@/hooks/use-toast"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 import { Separator } from "@/components/ui/separator"
-
-// LINE Login 相關設定
-const LINE_CLIENT_ID = import.meta.env.VITE_LINE_CLIENT_ID;
-const LINE_REDIRECT_URI = import.meta.env.VITE_LINE_REDIRECT_URI;
-const LINE_STATE = "12345abcde"; // 應該使用隨機生成的值
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -24,27 +19,48 @@ export default function LoginPage() {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      const decoded: any = jwtDecode.jwtDecode(credentialResponse.credential);
-      console.log('Decoded credential:', decoded);
+      console.log('Google response:', credentialResponse);
       
-      const userInfo = {
-        email: decoded.email,
-        name: decoded.name,
-        picture: decoded.picture,
-      };
+      const response = await fetch('http://localhost:8000/api/auth/social/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+          clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
+        })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Backend authentication failed');
+      }
+  
+      const authData = await response.json();
+      console.log('Auth response:', authData);
       
-      sessionStorage.setItem('justLoggedIn', 'true');
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      
-      await Promise.resolve();
-      navigate('/');
+      if (authData.user) {
+        localStorage.setItem('userInfo', JSON.stringify(authData.user));
+        sessionStorage.setItem('justLoggedIn', 'true');
+        
+        toast({
+          title: authData.is_new ? "註冊成功" : "登入成功",
+          description: `歡迎${authData.is_new ? '' : '回來'}，${authData.user.primary_account.name}！`,
+        });
+        
+        navigate('/');
+      } else {
+        throw new Error('Invalid response from backend');
+      }
       
     } catch (error) {
       console.error('Error processing login:', error);
       toast({
         variant: "destructive",
         title: "登入失敗",
-        description: "處理登入資訊時發生錯誤，請稍後再試。",
+        description: error instanceof Error ? error.message : "處理登入資訊時發生錯誤，請稍後再試。",
       });
     }
   };
@@ -59,7 +75,29 @@ export default function LoginPage() {
   };
 
   const handleLineLogin = () => {
-    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${encodeURIComponent(LINE_REDIRECT_URI)}&state=${LINE_STATE}&scope=profile%20openid%20email`;
+    const LINE_CLIENT_ID = import.meta.env.VITE_LINE_CLIENT_ID;
+    const LINE_REDIRECT_URI = `${window.location.origin}/login/line/callback`;
+    const LINE_STATE = uuidv4();
+    
+    // 保存 state 到 sessionStorage
+    sessionStorage.setItem('lineLoginState', LINE_STATE);
+    
+    // 確保所有參數都正確編碼
+    const params = {
+      response_type: 'code',
+      client_id: LINE_CLIENT_ID,
+      redirect_uri: LINE_REDIRECT_URI,
+      state: LINE_STATE,
+      scope: 'profile openid email',
+      // 添加 nonce 參數來增加安全性
+      nonce: uuidv4()
+    };
+  
+    // 使用 URLSearchParams 來正確編碼參數
+    const queryString = new URLSearchParams(params).toString();
+    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?${queryString}`;
+    
+    // 使用 window.location.href 進行跳轉
     window.location.href = lineLoginUrl;
   };
 
@@ -83,11 +121,12 @@ export default function LoginPage() {
               text="signin_with"
               shape="rectangular"
               locale="zh_TW"
+              width={200}
               useOneTap={false}
             />
           </div>
 
-          <div className="flex justify-center w-24 items-center gap-4">
+          <div className="flex justify-center w-12 items-center gap-4">
             <Separator className="flex-grow bg-zinc-800" />
             <span className="text-sm text-zinc-500">或</span>
             <Separator className="flex-grow bg-zinc-800" />
@@ -95,7 +134,7 @@ export default function LoginPage() {
 
           <Button
             onClick={handleLineLogin}
-            className="w-[180px] bg-[#06C755] hover:bg-[#06C755]/90 text-white flex items-center gap-2"
+            className="w-[200px] bg-[#06C755] hover:bg-[#06C755]/90 text-white flex items-center gap-2"
           >
             <img
               src="/line_88.png"

@@ -1,3 +1,7 @@
 frontend/.env
 frontend/build/
 frontend/build/index.html
+
+/backend/.env
+/backend/venv/
+backend/__pycache__/

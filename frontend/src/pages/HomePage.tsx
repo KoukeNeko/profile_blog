@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect} from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 
 function Homepage() {
 

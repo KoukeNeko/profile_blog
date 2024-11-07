@@ -5,12 +5,12 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-// import { ThemeProvider } from "@/components/ui/theme-provider"
 import NavBar from "@/components/custom/ui/NavBar";
 import Footer from "@/components/custom/ui/Footer";
 import ToTopButton from "@/components/custom/ui/ToTopButton";
 import Homepage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
+import LineCallbackPage from "@/pages/LineCallbackPage";
 import BlogPage from "@/pages/BlogPage";
 import ProjectPage from "@/pages/ProjectPage";
 import AboutPage from "@/pages/AboutPage";
@@ -19,7 +19,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 
 const MainContent = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const centeredPages = ["/", "/login"];
+  const centeredPages = ["/", "/login", "/login/line/callback"];
   const shouldCenter = centeredPages.includes(location.pathname);
 
   return (
@@ -34,19 +34,16 @@ const MainContent = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
-  // 確保 VITE_GOOGLE_CLIENT_ID 存在
-  if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  if (!googleClientId) {
     console.error('Google Client ID is not set in environment variables');
     return null;
   }
 
   return (
-    <GoogleOAuthProvider 
-      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-    >
-      {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
+    <GoogleOAuthProvider clientId={googleClientId}>
       <Router>
-        {/* <div className="flex flex-col min-h-screen bg-zinc-900 text-zinc-400"> */}
         <div className="flex flex-col min-h-screen bg-zinc-950 text-zinc-400">
           <NavBar />
           <div className="flex-grow flex flex-col pt-16">
@@ -54,6 +51,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/login/line/callback" element={<LineCallbackPage />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/project" element={<ProjectPage />} />
                 <Route path="/about" element={<AboutPage />} />
@@ -66,7 +64,6 @@ function App() {
           <ToTopButton />
         </div>
       </Router>
-      {/* </ThemeProvider> */}
     </GoogleOAuthProvider>
   );
 }

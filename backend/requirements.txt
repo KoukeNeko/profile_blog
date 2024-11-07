@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pymongo
+uuid
+motor
+pydantic
+python-dotenv
+PyJWT

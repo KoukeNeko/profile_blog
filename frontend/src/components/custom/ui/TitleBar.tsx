@@ -1,20 +1,6 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
-
-interface TitleBarProps {
-  title: ReactNode;
-  subtitle?: ReactNode;
-  /** 是否啟用打字機效果 */
-  enableTypewriter?: boolean;
-  /** 主標題打字機效果延遲時間 (毫秒) */
-  titleDelay?: number;
-  /** 副標題打字機效果延遲時間 (毫秒) */
-  subtitleDelay?: number;
-  /** 自定義主標題樣式 */
-  titleClassName?: string;
-  /** 自定義副標題樣式 */
-  subtitleClassName?: string;
-}
+import type {TitleBarProps} from "@/types/ui";
 
 const TitleBar: React.FC<TitleBarProps> = ({ 
   title, 

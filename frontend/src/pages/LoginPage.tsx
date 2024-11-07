@@ -68,7 +68,7 @@ export default function LoginPage() {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={handleGoogleError}
-            theme="filled_black"
+            theme="outline"
             size="large"
             type="standard"
             text="signin_with"

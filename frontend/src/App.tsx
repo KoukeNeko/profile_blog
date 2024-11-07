@@ -5,7 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { ThemeProvider } from "@/components/ui/theme-provider"
+// import { ThemeProvider } from "@/components/ui/theme-provider"
 import NavBar from "@/components/custom/ui/NavBar";
 import Footer from "@/components/custom/ui/Footer";
 import ToTopButton from "@/components/custom/ui/ToTopButton";
@@ -44,7 +44,7 @@ function App() {
     <GoogleOAuthProvider 
       clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
     >
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
       <Router>
         {/* <div className="flex flex-col min-h-screen bg-zinc-900 text-zinc-400"> */}
         <div className="flex flex-col min-h-screen bg-zinc-950 text-zinc-400">
@@ -66,7 +66,7 @@ function App() {
           <ToTopButton />
         </div>
       </Router>
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </GoogleOAuthProvider>
   );
 }

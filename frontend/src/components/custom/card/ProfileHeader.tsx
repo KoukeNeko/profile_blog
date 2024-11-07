@@ -1,15 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
-import  { ReactNode } from 'react';
+import type { ProfileHeaderProps } from "@/types/ui";
 
-
-interface ProfileHeaderProps {
-    avatar: string;
-    name: ReactNode;
-    role: ReactNode;
-    location: ReactNode;
-    connections: string;
-  }
-  
 
   export function ProfileHeader({ 
     avatar, 

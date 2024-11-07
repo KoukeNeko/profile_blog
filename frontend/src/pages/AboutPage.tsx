@@ -1,5 +1,4 @@
-import {useEffect, useState} from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Briefcase,
@@ -11,15 +10,31 @@ import {
   Calendar,
   Code,
   Signature,
+  LucideIcon,
 } from "lucide-react";
 import TypewriterText from "@/components/custom/effect/typewriter_gpt_style";
 import TitleBar from "@/components/custom/ui/TitleBar";
 import { ProfileCard, ProfileItem } from "@/components/custom/card/ProfileCard";
 import { ProfileHeader } from "@/components/custom/card/ProfileHeader";
+import type { Profile, Experience, Education, Certification, Volunteer, Project, Score, Language } from "@/types/profile";
 
 import { fetchProfileData } from "@/utils/api";
 
-const TypewriterProfileItem = ({
+interface TypewriterProfileItemProps {
+  icon: LucideIcon;
+  title: string;
+  subtitle?: string;
+  period?: string;
+  location?: string;
+  description?: string | string[];
+  extra?: ReactNode;
+  index?: number;
+  baseDelay?: number;
+}
+
+
+
+const TypewriterProfileItem: React.FC<TypewriterProfileItemProps> = ({
   icon: Icon,
   title,
   subtitle,
@@ -35,6 +50,19 @@ const TypewriterProfileItem = ({
   const periodDelay = subtitleDelay + 100;
   const descriptionDelay = periodDelay + 100;
 
+  const renderDescription = () => {
+    if (!description) return null;
+    if (Array.isArray(description)) {
+      return (
+        <TypewriterText 
+          text={description.join('\n')} 
+          delay={descriptionDelay} 
+        />
+      );
+    }
+    return <TypewriterText text={description} delay={descriptionDelay} />;
+  };
+
   return (
     <ProfileItem
       icon={Icon}
@@ -42,7 +70,7 @@ const TypewriterProfileItem = ({
       subtitle={subtitle && <TypewriterText text={subtitle} delay={subtitleDelay} />}
       period={period && <TypewriterText text={period} delay={periodDelay} />}
       location={location && <TypewriterText text={location} delay={periodDelay} />}
-      description={description && <TypewriterText text={description} delay={descriptionDelay} />}
+      description={renderDescription()}
       extra={extra}
     />
   );
@@ -130,7 +158,7 @@ export default function AboutPage() {
         title={<TypewriterText text="About" delay={baseDelay} />}
       >
         <p className="text-zinc-400 whitespace-pre-line">
-          <TypewriterText text={profile.about} delay={0} />
+          <TypewriterText text={profile.about} delay={baseDelay + 100} />
         </p>
       </ProfileCard>
 
@@ -139,7 +167,7 @@ export default function AboutPage() {
         icon={Briefcase} 
         title={<TypewriterText text="Experience" delay={baseDelay + 200} />}
       >
-        {profile.experience.map((exp, index) => (
+        {profile.experience.map((exp: Experience, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={Briefcase}
@@ -159,7 +187,7 @@ export default function AboutPage() {
         icon={GraduationCap} 
         title={<TypewriterText text="Education" delay={baseDelay + 400} />}
       >
-        {profile.education.map((edu, index) => (
+        {profile.education.map((edu: Education, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={GraduationCap}
@@ -177,7 +205,7 @@ export default function AboutPage() {
         icon={Award} 
         title={<TypewriterText text="Licenses & Certifications" delay={baseDelay + 600} />}
       >
-        {profile.certifications.map((cert, index) => (
+        {profile.certifications.map((cert: Certification, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={Award}
@@ -218,7 +246,7 @@ export default function AboutPage() {
         icon={Calendar} 
         title={<TypewriterText text="Volunteer Experience" delay={baseDelay + 1000} />}
       >
-        {profile.volunteer.map((vol, index) => (
+        {profile.volunteer.map((vol: Volunteer, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={Calendar}
@@ -237,7 +265,7 @@ export default function AboutPage() {
         icon={Code} 
         title={<TypewriterText text="Projects" delay={baseDelay + 1200} />}
       >
-        {profile.projects.map((project, index) => (
+        {profile.projects.map((project: Project, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={Code}
@@ -265,7 +293,7 @@ export default function AboutPage() {
         icon={LucideBookOpen} 
         title={<TypewriterText text="Test Scores" delay={baseDelay + 1500} />}
       >
-        {profile.scores.map((score, index) => (
+        {profile.scores.map((score: Score, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={LucideBookOpen}
@@ -283,12 +311,16 @@ export default function AboutPage() {
         icon={Globe} 
         title={<TypewriterText text="Languages" delay={baseDelay + 1700} />}
       >
-        {profile.languages.map((lang, index) => (
+        {profile.languages.map((lang: Language, index: number) => (
           <TypewriterProfileItem
             key={index}
             icon={Globe}
             title={lang.name}
             subtitle={lang.level}
+            period={undefined}
+            location={undefined}
+            description={undefined}
+            extra={undefined}
             index={index}
             baseDelay={baseDelay + 1800}
           />

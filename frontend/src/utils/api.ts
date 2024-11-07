@@ -1,6 +1,5 @@
 // function to fetch data from the API
 export async function fetchProfileData(
-    id: string = "debug"
 ) {
 
     // when in debug mode, return mock data

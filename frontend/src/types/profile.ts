@@ -1,3 +1,4 @@
+// /src/types/profile.ts
 export interface Profile {
     name: string;
     avatar: string;
@@ -14,7 +15,7 @@ export interface Profile {
     languages: Language[];
   }
   
-  interface Experience {
+  export interface Experience {
     title: string;
     company: string;
     period: string;
@@ -23,7 +24,7 @@ export interface Profile {
     logo: string;
   }
   
-  interface Education {
+  export interface Education {
     school: string;
     degree: string;
     field: string;
@@ -31,7 +32,7 @@ export interface Profile {
     logo: string;
   }
   
-  interface Certification {
+  export interface Certification {
     name: string;
     issuer: string;
     issued: string;
@@ -40,14 +41,14 @@ export interface Profile {
     credentialId?: string;
   }
   
-  interface Volunteer {
+  export interface Volunteer {
     role: string;
     organization: string;
     period: string;
     description: string[];
   }
   
-  interface Project {
+  export interface Project {
     name: string;
     period: string;
     description: string;
@@ -57,14 +58,14 @@ export interface Profile {
     technologies?: string[];
   }
   
-  interface Score {
+  export interface Score {
     test: string;
     score: string;
     date: string;
     logo: string;
   }
   
-  interface Language {
+  export interface Language {
     name: string;
     level: string;
   }

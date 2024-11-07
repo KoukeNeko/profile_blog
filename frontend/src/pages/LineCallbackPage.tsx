@@ -79,7 +79,7 @@ export default function LineCallbackPage() {
           userId: profileData.userId,
           displayName: profileData.displayName,
           pictureUrl: profileData.pictureUrl || '',
-          email: decodedIdToken.email || '',
+          email: profileData.email || '',
           statusMessage: profileData.statusMessage || '',
           access_token: tokenData.access_token
         };

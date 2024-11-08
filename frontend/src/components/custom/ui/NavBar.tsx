@@ -1,5 +1,5 @@
 import { Button } from "../../ui/button";
-import { Settings, Menu, Signature, ReceiptText, Code, User2Icon } from "lucide-react";
+import {  Menu, Signature, ReceiptText, Code, User2Icon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,

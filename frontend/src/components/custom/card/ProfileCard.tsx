@@ -4,7 +4,7 @@ import { LucideIcon } from 'lucide-react';
 
 interface ProfileCardProps {
   icon: LucideIcon;
-  title: string;
+  title: ReactNode;
   children: ReactNode;
 }
 
@@ -27,11 +27,11 @@ export function ProfileCard({ icon: Icon, title, children }: ProfileCardProps) {
 // 可重用的個人資料項目元件
 interface ProfileItemProps {
   icon: LucideIcon;
-  title: string;
-  subtitle?: string;
-  period?: string;
-  location?: string;
-  description?: string[] | string;
+  title: ReactNode;
+  subtitle?: ReactNode;
+  period?: ReactNode;
+  location?: ReactNode;
+  description?: string[] | string | ReactNode;
   extra?: ReactNode;
 }
 

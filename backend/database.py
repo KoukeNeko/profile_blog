@@ -22,27 +22,12 @@ class Database:
             if not mongodb_url:
                 raise Exception("MONGODB_URL not found in environment variables")
 
-            # Parse the connection string to ensure all required parameters
-            if 'mongodb+srv://' not in mongodb_url:
-                raise Exception("Connection string must use mongodb+srv:// protocol")
-
-            # Configure TLS/SSL context with system certificates
-            tls_context = ssl.create_default_context(cafile=certifi.where())
-            tls_context.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # Only allow TLS 1.2+
-            tls_context.verify_mode = ssl.CERT_REQUIRED
-            tls_context.check_hostname = True
-            
-            # Ensure all required parameters are in the URL
+            # Parse and update the connection string
             url_parts = list(urllib.parse.urlparse(mongodb_url))
             query = dict(urllib.parse.parse_qsl(url_parts[4]))
             query.update({
-                'ssl': 'true',
-                'tls': 'true',
-                'tlsAllowInvalidCertificates': 'false',
                 'retryWrites': 'true',
-                'w': 'majority',
-                'maxPoolSize': '10',
-                'minPoolSize': '0'
+                'w': 'majority'
             })
             url_parts[4] = urllib.parse.urlencode(query)
             mongodb_url = urllib.parse.urlunparse(url_parts)
@@ -51,31 +36,20 @@ class Database:
             print(f"Using certifi path: {certifi.where()}")
             print(f"SSL version: {ssl.OPENSSL_VERSION}")
             
-            # Initialize client with comprehensive configuration
+            # Initialize client with minimal SSL configuration
             cls.client = AsyncIOMotorClient(
                 mongodb_url,
                 server_api=ServerApi('1'),
                 tls=True,
-                tlsCertificateKeyFile=None,  # Use system certificates
                 tlsCAFile=certifi.where(),
-                tlsAllowInvalidCertificates=False,
-                tlsInsecure=False,
-                ssl_cert_reqs=ssl.CERT_REQUIRED,
-                ssl_ca_certs=certifi.where(),
                 connectTimeoutMS=30000,
                 socketTimeoutMS=30000,
                 serverSelectionTimeoutMS=30000,
-                waitQueueTimeoutMS=30000,
-                maxPoolSize=10,
-                minPoolSize=0,
-                maxIdleTimeMS=50000,
-                ssl_context=tls_context,
-                retryWrites=True,
-                w='majority'
+                maxPoolSize=10
             )
             
-            # Test connection with explicit timeout
-            await cls.client.admin.command('ping', maxTimeMS=10000)
+            # Test the connection
+            await cls.client.admin.command('ping')
             print("Successfully connected to MongoDB!")
             
             cls.db = cls.client.profile_blog
@@ -88,22 +62,10 @@ class Database:
                 print("Successfully created database indexes")
             except Exception as index_error:
                 print(f"Warning: Error creating indexes: {index_error}")
-                # Continue execution even if index creation fails
             
         except Exception as e:
             error_msg = str(e)
             print(f"Error connecting to MongoDB: {error_msg}")
-            
-            print("\nDetailed Connection Information:")
-            print(f"Python SSL Version: {ssl.OPENSSL_VERSION}")
-            print(f"Certifi Path: {certifi.where()}")
-            print(f"TLS Context Options: {tls_context.options}")
-            print(f"Verify Mode: {tls_context.verify_mode}")
-            print("Available SSL/TLS versions:", [
-                name for name in dir(ssl) 
-                if name.startswith('PROTOCOL_') or name.startswith('TLS')
-            ])
-            
             print("\nTroubleshooting Steps:")
             print("1. Verify MongoDB Atlas Network Access settings")
             print("2. Check if MongoDB user has correct privileges")

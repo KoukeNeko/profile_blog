@@ -31,7 +31,7 @@ export default function LoginPage() {
     try {
       console.log('Google response:', credentialResponse);
       
-      const response = await fetch('http://localhost:8000/api/auth/social/google', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/auth/social/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

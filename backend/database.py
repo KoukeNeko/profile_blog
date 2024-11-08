@@ -5,6 +5,7 @@ from typing import Optional, Dict
 from bson import ObjectId
 import os
 from dotenv import load_dotenv
+import certifi
 
 load_dotenv()
 
@@ -19,23 +20,38 @@ class Database:
             if not mongodb_url:
                 raise Exception("MONGODB_URL not found in environment variables")
             
+            # Add SSL configuration and use certifi for certificate verification
             cls.client = AsyncIOMotorClient(
                 mongodb_url,
-                server_api=ServerApi('1')
+                server_api=ServerApi('1'),
+                tlsCAFile=certifi.where(),  # Add this line
+                connectTimeoutMS=30000,      # Increase timeout
+                socketTimeoutMS=30000,       # Increase timeout
+                serverSelectionTimeoutMS=30000  # Increase server selection timeout
             )
             
+            # Test the connection with a timeout
             await cls.client.admin.command('ping')
             print("Pinged your deployment. You successfully connected to MongoDB!")
             
             cls.db = cls.client.profile_blog
             
-            # Create indexes
-            await cls.db.users.create_index("primary_account")
-            await cls.db.users.create_index([("connected_accounts.google.id", 1)])
-            await cls.db.users.create_index([("connected_accounts.line.id", 1)])
+            # Create indexes with error handling
+            try:
+                await cls.db.users.create_index("primary_account")
+                await cls.db.users.create_index([("connected_accounts.google.id", 1)])
+                await cls.db.users.create_index([("connected_accounts.line.id", 1)])
+            except Exception as index_error:
+                print(f"Warning: Error creating indexes: {index_error}")
+                # Continue execution even if index creation fails
             
         except Exception as e:
-            print(f"Error connecting to MongoDB: {e}")
+            print(f"Error connecting to MongoDB: {str(e)}")
+            # Add more detailed error information
+            if "SSL" in str(e):
+                print("SSL Error Details:")
+                print(f"Certifi path being used: {certifi.where()}")
+                print("Please ensure your MongoDB connection string includes ssl=true and that your environment supports TLS/SSL")
             raise e
     
     @classmethod
@@ -48,33 +64,11 @@ class Database:
     @classmethod
     async def close_db(cls):
         if cls.client:
-            cls.client.close()
-    
-    @classmethod
-    async def get_user_by_social_id(cls, provider: str, social_id: str) -> Optional[Dict]:
-        if not cls.client:
-            raise Exception("Database not connected")
-            
-        query = {f"connected_accounts.{provider}.id": social_id}
-        try:
-            user = await cls.db.users.find_one(query)
-            return cls._serialize_doc(user)
-        except Exception as e:
-            print(f"Error finding user: {e}")
-            raise e
-    
-    @classmethod
-    async def create_user(cls, user_data: Dict) -> Dict:
-        if not cls.client:
-            raise Exception("Database not connected")
-            
-        try:
-            result = await cls.db.users.insert_one(user_data)
-            created_user = await cls.db.users.find_one({"_id": result.inserted_id})
-            return cls._serialize_doc(created_user)
-        except Exception as e:
-            print(f"Error creating user: {e}")
-            raise e
+            try:
+                cls.client.close()
+                print("Database connection closed successfully")
+            except Exception as e:
+                print(f"Error closing database connection: {e}")
     
     @classmethod
     async def update_user(cls, social_id: str, provider: str, update_data: Dict) -> Optional[Dict]:

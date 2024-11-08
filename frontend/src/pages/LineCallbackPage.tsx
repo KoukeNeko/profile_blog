@@ -85,7 +85,7 @@ export default function LineCallbackPage() {
 
         console.log('Sending to backend:', backendData);
 
-        const backendResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/social/line`, {
+        const backendResponse = await fetch(`${import.meta.env.VITE_BACKEND_URI}/api/auth/social/line`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

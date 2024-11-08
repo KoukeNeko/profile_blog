@@ -210,7 +210,7 @@ export default function ProfilePage() {
     // 修正圖示路徑，從 public 目錄引用
     const accountIcon =
       provider === "google"
-        ? "https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png"
+        ? "https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png"
         : "https://line.me/static/b83de682148ca1092750bd59456ca0d9/c0a13/329473e988bb3cab682a5b5bd46b47dc.png";
 
     return (
